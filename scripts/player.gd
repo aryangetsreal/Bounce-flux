@@ -8,6 +8,12 @@ const GRAVITY: float = 1500.0
 # The tallest required step is the power-station gantry (157 px).
 const JUMP_SPEED: float = -720.0
 
+@export_group("Movement")
+@export var move_speed: float = SPEED
+@export var acceleration: float = ACCELERATION
+@export var gravity: float = GRAVITY
+@export var jump_speed: float = JUMP_SPEED
+
 var coyote: float = 0.0
 var jump_buffer: float = 0.0
 var dead: bool = false
@@ -36,10 +42,10 @@ func _physics_process(delta: float) -> void:
 	coyote = 0.10 if is_on_floor() else maxf(0.0, coyote - delta)
 	jump_buffer = 0.10 if Input.is_action_just_pressed("jump") else maxf(0.0, jump_buffer - delta)
 	var axis := Input.get_axis("move_left", "move_right")
-	velocity.x = move_toward(velocity.x, axis * SPEED, ACCELERATION * delta)
-	velocity.y += GRAVITY * delta
+	velocity.x = move_toward(velocity.x, axis * move_speed, acceleration * delta)
+	velocity.y += gravity * delta
 	if coyote > 0.0 and jump_buffer > 0.0:
-		velocity.y = JUMP_SPEED
+		velocity.y = jump_speed
 		coyote = 0.0
 		jump_buffer = 0.0
 		stretch = Vector2(0.78, 1.22)
