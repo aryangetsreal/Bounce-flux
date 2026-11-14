@@ -35,6 +35,14 @@ func _ready() -> void:
 		# the safe cooldown route or push players outside its damage region.
 		collision_layer = 0
 		collision_mask = 0
+	if not texture:
+		match trap_type:
+			TrapType.CRATE:
+				if ResourceLoader.exists("res://assets/props/crate.png"):
+					texture = load("res://assets/props/crate.png")
+			TrapType.ELECTRICAL:
+				if ResourceLoader.exists("res://assets/props/hazard_electric.png"):
+					texture = load("res://assets/props/hazard_electric.png")
 
 func _physics_process(delta: float) -> void:
 	if RewindManager.is_rewinding:
@@ -103,6 +111,7 @@ func reset_trap() -> bool:
 		return false
 	position = initial_position
 	velocity = Vector2.ZERO
+	time_elapsed = 0.0
 	_set_crate_state(CrateState.READY)
 	queue_redraw()
 	return true
@@ -187,12 +196,16 @@ func restore_rewind_state(state: Dictionary) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	if texture and trap_type != TrapType.ELECTRICAL:
-		draw_texture_rect(texture, Rect2(-24, -24, 48, 48), false)
-		return
-
 	match trap_type:
 		TrapType.CRATE:
+			if texture:
+				draw_texture_rect(texture, Rect2(-24, -24, 48, 48), false)
+				if crate_state == CrateState.WARNING:
+					var warning_alpha := 0.5 + 0.5 * sin(state_time * 30.0)
+					draw_rect(Rect2(-24, -24, 48, 48), Color(0.94, 0.78, 0.45, warning_alpha), false, 2)
+				elif crate_state == CrateState.RESETTING:
+					draw_rect(Rect2(-24, -24, 48, 48), Color("48d9e8"), false, 2)
+				return
 			# Pixelated shipping crate (48x48)
 			var wood_dark := Color("543216")
 			var wood_mid := Color("855127")
@@ -218,6 +231,15 @@ func _draw() -> void:
 				draw_rect(Rect2(-24, -24, 48, 48), Color("48d9e8"), false, 2)
 
 		TrapType.ELECTRICAL:
+			if texture:
+				draw_texture_rect(texture, Rect2(-24, -28, 48, 56), false)
+				if active_hazard:
+					var cyan_glow := Color(0.2, 0.8, 0.95, 0.35)
+					draw_rect(Rect2(-16, -20, 32, 40), cyan_glow)
+				else:
+					draw_rect(Rect2(-3, -3, 6, 6), Color("e04545"))
+				return
+
 			# Pixelated electrical emitter node
 			draw_rect(Rect2(-16, -28, 32, 56), Color("121926"))
 			draw_rect(Rect2(-12, -24, 24, 48), Color("1a2436"))

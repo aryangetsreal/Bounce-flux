@@ -62,6 +62,14 @@ func test_release() -> void:
 		click_at(marker.get_global_transform_with_canvas() * Vector2.ZERO)
 		check(not trap.triggered, "Release click suppressed during rewind")
 		rewind.is_rewinding = false
+		var player = current_scene.get_node("Player")
+		player.set_physics_process(false)
+		player.global_position = marker.global_position + Vector2(0,-26.1)
+		await ticks(4)
+		check(not trap.triggered, "Player outside compact marker cannot trigger an invisible touch zone")
+		player.global_position = marker.global_position + Vector2(0,-25.5)
+		await ticks(4)
+		check(trap.triggered, "Player touching the visible marker can still activate it")
 	root.size = Vector2i(1280,720)
 
 func test_catwalks() -> void:
@@ -80,6 +88,16 @@ func test_catwalks() -> void:
 			await ticks(2)
 			var hit = player.move_and_collide(direction * 120)
 			check(hit != null and hit.get_collider() == catwalk, "Stage %d: swept ball collision from %s" % [stage, -direction])
+		player.global_position = center + Vector2(0,70)
+		player.velocity = Vector2(0,-1500)
+		player.set_physics_process(true)
+		await ticks(10)
+		check(player.position.y >= center.y + half.y + 21 and player.velocity.y >= 0, "Actual high-speed upward player motion hits the catwalk underside")
+		player.global_position = center - Vector2(0,70)
+		player.velocity = Vector2(0,1500)
+		await ticks(10)
+		check(player.is_on_floor() and player.position.y < center.y, "Actual high-speed downward player motion lands on the catwalk")
+		player.set_physics_process(false)
 		var other := current_scene.get_node("World/Shelf1/Collider" if stage == 2 else "World/EntranceLedge/Collider")
 		check(other.one_way_collision, "Other intentionally one-way platforms remain one-way")
 

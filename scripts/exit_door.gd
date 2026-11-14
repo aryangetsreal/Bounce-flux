@@ -3,10 +3,13 @@ extends Area2D
 signal exit_reached
 
 @export var required_evidence_id: String = ""
+@export var texture: Texture2D
 var locked: bool = true
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
+	if not texture and ResourceLoader.exists("res://assets/props/portal.png"):
+		texture = load("res://assets/props/portal.png")
 
 func _physics_process(_delta: float) -> void:
 	queue_redraw()
@@ -20,6 +23,23 @@ func set_unlocked(val: bool) -> void:
 	queue_redraw()
 
 func _draw() -> void:
+	if texture:
+		if not locked:
+			# Glowing cyan temporal portal
+			draw_texture_rect(texture, Rect2(-24, -70, 48, 70), false)
+			# Outer EXIT sign overhead
+			draw_rect(Rect2(-20, -84, 40, 10), Color("0d141e"))
+			draw_rect(Rect2(-18, -82, 36, 6), Color("4deeea"))
+			return
+		else:
+			# Locked doorway with red lock bolt and dim portal silhouette
+			draw_texture_rect(texture, Rect2(-24, -70, 48, 70), false)
+			draw_rect(Rect2(-24, -70, 48, 70), Color(0.04, 0.07, 0.12, 0.75))
+			draw_rect(Rect2(-20, -84, 40, 10), Color("0d141e"))
+			draw_rect(Rect2(-18, -82, 36, 6), Color("e04545"))
+			draw_rect(Rect2(14, -36, 4, 8), Color("e04545"))
+			return
+
 	# 2D Pixelated minimalist doorway
 	var frame_color := Color("182333")
 	var door_color := Color("0b111c")

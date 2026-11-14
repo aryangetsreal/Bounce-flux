@@ -11,6 +11,8 @@ var pulse_time: float = 0.0
 func _ready() -> void:
 	add_to_group("rewindable")
 	body_entered.connect(_on_body_entered)
+	if not texture and ResourceLoader.exists("res://assets/props/evidence.png"):
+		texture = load("res://assets/props/evidence.png")
 
 func _physics_process(delta: float) -> void:
 	if not RewindManager.is_rewinding:
@@ -46,7 +48,7 @@ func _draw() -> void:
 	var offset_y: float = -2.0 if pulse_step == 1 else 0.0
 	draw_set_transform(Vector2(0, offset_y))
 	if texture:
-		draw_texture_rect(texture, Rect2(-16, -16, 32, 32), false)
+		draw_texture_rect(texture, Rect2(-18, -22, 36, 44), false)
 	else:
 		# Pixelated minimalist gold dossier record
 		# Outer folder

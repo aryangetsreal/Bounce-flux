@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 @export var texture: Texture2D
+@export var dead_texture: Texture2D
 const SPEED: float = 330.0
 const ACCELERATION: float = 1800.0
 const GRAVITY: float = 1500.0
@@ -24,6 +25,10 @@ func _ready() -> void:
 	add_to_group("rewindable")
 	add_to_group("player")
 	checkpoint = position
+	if not texture and ResourceLoader.exists("res://assets/characters/ball.png"):
+		texture = load("res://assets/characters/ball.png")
+	if not dead_texture and ResourceLoader.exists("res://assets/characters/ball_dead.png"):
+		dead_texture = load("res://assets/characters/ball_dead.png")
 
 func _physics_process(delta: float) -> void:
 	if RewindManager.is_rewinding:
@@ -93,13 +98,27 @@ func restore_rewind_state(state: Dictionary) -> void:
 	queue_redraw()
 
 func _draw() -> void:
+	if dead:
+		if dead_texture:
+			draw_texture_rect(dead_texture, Rect2(-24, -24, 48, 48), false)
+			return
+		# 2D Pixelated minimalist dead ball
+		var body_col := Color("e0536c")
+		var shadow_col := Color("6e2433")
+		draw_rect(Rect2(-14, -22, 28, 44), body_col)
+		draw_rect(Rect2(-20, -18, 40, 36), body_col)
+		draw_rect(Rect2(-22, -14, 44, 28), body_col)
+		draw_rect(Rect2(-12, 16, 24, 4), shadow_col)
+		draw_rect(Rect2(-18, 12, 36, 4), shadow_col)
+		return
+
 	draw_set_transform(Vector2.ZERO, visual_angle, stretch)
 	if texture:
 		draw_texture_rect(texture, Rect2(-22, -22, 44, 44), false)
 	else:
 		# 2D Pixelated minimalist ball
-		var body_col := Color("4deeea") if not dead else Color("e0536c")
-		var shadow_col := Color("1f5c6b") if not dead else Color("6e2433")
+		var body_col := Color("4deeea")
+		var shadow_col := Color("1f5c6b")
 		var eye_col := Color("0b1726")
 		var glint_col := Color("d8ffff")
 		
