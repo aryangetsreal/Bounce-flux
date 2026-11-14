@@ -21,6 +21,14 @@ func _ready() -> void:
 	add_to_group("rewindable")
 	add_to_group("traps")
 	initial_position = position
+	if not texture:
+		match trap_type:
+			TrapType.CRATE:
+				if ResourceLoader.exists("res://assets/props/crate.png"):
+					texture = load("res://assets/props/crate.png")
+			TrapType.ELECTRICAL:
+				if ResourceLoader.exists("res://assets/props/hazard_electric.png"):
+					texture = load("res://assets/props/hazard_electric.png")
 
 func _physics_process(delta: float) -> void:
 	if RewindManager.is_rewinding:
@@ -119,12 +127,11 @@ func restore_rewind_state(state: Dictionary) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	if texture:
-		draw_texture_rect(texture, Rect2(-24, -24, 48, 48), false)
-		return
-
 	match trap_type:
 		TrapType.CRATE:
+			if texture:
+				draw_texture_rect(texture, Rect2(-24, -24, 48, 48), false)
+				return
 			# Pixelated shipping crate (48x48)
 			var wood_dark := Color("543216")
 			var wood_mid := Color("855127")
@@ -145,6 +152,15 @@ func _draw() -> void:
 			draw_rect(Rect2(-16, -2, 32, 4), wood_light)
 
 		TrapType.ELECTRICAL:
+			if texture:
+				draw_texture_rect(texture, Rect2(-24, -28, 48, 56), false)
+				if active_hazard:
+					var cyan_glow := Color(0.2, 0.8, 0.95, 0.35)
+					draw_rect(Rect2(-16, -20, 32, 40), cyan_glow)
+				else:
+					draw_rect(Rect2(-3, -3, 6, 6), Color("e04545"))
+				return
+
 			# Pixelated electrical emitter node
 			draw_rect(Rect2(-16, -28, 32, 56), Color("121926"))
 			draw_rect(Rect2(-12, -24, 24, 48), Color("1a2436"))

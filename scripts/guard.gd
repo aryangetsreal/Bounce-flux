@@ -6,6 +6,7 @@ signal player_touched
 @export var speed: float = 110.0
 @export var is_boss: bool = false
 @export var texture: Texture2D
+@export var disabled_texture: Texture2D
 
 var origin_x: float = 0.0
 var direction: float = 1.0
@@ -16,6 +17,14 @@ func _ready() -> void:
 	add_to_group("rewindable")
 	add_to_group("guards")
 	origin_x = position.x
+	if not texture:
+		var tex_path := "res://assets/characters/boss.png" if is_boss else "res://assets/characters/guard.png"
+		if ResourceLoader.exists(tex_path):
+			texture = load(tex_path)
+	if not disabled_texture:
+		var dis_path := "res://assets/characters/boss_disabled.png" if is_boss else "res://assets/characters/guard_disabled.png"
+		if ResourceLoader.exists(dis_path):
+			disabled_texture = load(dis_path)
 
 func _physics_process(delta: float) -> void:
 	if RewindManager.is_rewinding:
@@ -77,9 +86,17 @@ func restore_rewind_state(state: Dictionary) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	if texture:
-		var size_rect := Rect2(-30, -50, 60, 60) if is_boss else Rect2(-20, -40, 40, 40)
-		draw_texture_rect(texture, size_rect, false)
+	var active_tex: Texture2D = disabled_texture if disabled and disabled_texture else texture
+	if active_tex:
+		var flip_scale := Vector2(direction if not disabled else 1.0, 1.0)
+		draw_set_transform(Vector2.ZERO, 0.0, flip_scale)
+		if is_boss:
+			var boss_rect := Rect2(-57, -36, 114, 72) if disabled else Rect2(-33, -70, 67, 85)
+			draw_texture_rect(active_tex, boss_rect, false)
+		else:
+			var guard_rect := Rect2(-36, -24, 73, 47) if disabled else Rect2(-21, -65, 43, 85)
+			draw_texture_rect(active_tex, guard_rect, false)
+		draw_set_transform(Vector2.ZERO)
 		return
 
 	if is_boss:
