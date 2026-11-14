@@ -154,6 +154,16 @@ func test_crates() -> void:
 		check(await wait_state(crate,crate.CrateState.IMPACT), "Repeat cycle %d reaches impact" % cycle)
 		check(await wait_state(crate,crate.CrateState.READY), "Repeat cycle %d returns ready" % cycle)
 	check(impacts[0] == 3 and get_nodes_in_group("traps").size() == 1, "Repeated triggering creates no duplicate impacts or boxes")
+	crate.trigger_trap()
+	await ticks(4)
+	player.reset_checkpoint()
+	var reset_warning_time: float = crate.state_time
+	Input.action_press("rewind")
+	await ticks(12)
+	check(crate.state_time == reset_warning_time, "Checkpoint history reset while R is held freezes the box without corrupting its warning")
+	Input.action_release("rewind")
+	check(await wait_state(crate,crate.CrateState.IMPACT), "Box resumes and impacts after rewind with empty history is released")
+	check(await wait_state(crate,crate.CrateState.READY), "Box rearms after checkpoint/time-control reset")
 	# Already-overlapping players can rearm after a rewind restore to READY.
 	var ready: Dictionary = crate.capture_rewind_state()
 	player.position = current_scene.get_node("World/TrapRelease/Marker").global_position

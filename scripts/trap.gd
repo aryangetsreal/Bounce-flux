@@ -231,22 +231,13 @@ func _draw() -> void:
 				draw_rect(Rect2(-24, -24, 48, 48), Color("48d9e8"), false, 2)
 
 		TrapType.ELECTRICAL:
-			if texture:
-				draw_texture_rect(texture, Rect2(-24, -28, 48, 56), false)
-				if active_hazard:
-					var cyan_glow := Color(0.2, 0.8, 0.95, 0.35)
-					draw_rect(Rect2(-16, -20, 32, 40), cyan_glow)
-				else:
-					draw_rect(Rect2(-3, -3, 6, 6), Color("e04545"))
-				return
-
 			# Pixelated electrical emitter node
 			draw_rect(Rect2(-16, -28, 32, 56), Color("121926"))
 			draw_rect(Rect2(-12, -24, 24, 48), Color("1a2436"))
 			draw_rect(Rect2(-14, -28, 28, 6), Color("2c3b54"))
 			draw_rect(Rect2(-14, 22, 28, 6), Color("2c3b54"))
 			if texture:
-				draw_texture_rect(texture, Rect2(-24, -24, 48, 48), false)
+				draw_texture_rect(texture, Rect2(-24, -28, 48, 56), false)
 			var field := Rect2(-ELECTRIC_SIZE / 2, ELECTRIC_SIZE)
 			if electric_phase == ElectricPhase.CHARGING:
 				var charge := fposmod(time_elapsed, maxf(cycle_time, 0.2)) / (maxf(cycle_time, 0.2) * 0.25)
