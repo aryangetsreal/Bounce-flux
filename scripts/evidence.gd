@@ -22,7 +22,7 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if body.is_in_group("player") or body.name == "Player":
 		collected = true
-		monitoring = false
+		set_deferred("monitoring", false)
 		evidence_collected.emit(evidence_id)
 		# Audio feedback hook (null-safe) if sound exists
 
@@ -35,7 +35,7 @@ func capture_rewind_state() -> Dictionary:
 
 func restore_rewind_state(state: Dictionary) -> void:
 	collected = state.collected
-	monitoring = state.monitoring
+	set_deferred("monitoring", state.monitoring)
 	pulse_time = state.pulse_time
 	queue_redraw()
 

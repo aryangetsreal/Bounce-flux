@@ -15,6 +15,7 @@ class MovingPlatform extends AnimatableBody2D:
 		var shape := RectangleShape2D.new()
 		shape.size = Vector2(140, 24)
 		collider.shape = shape
+		collider.one_way_collision = true
 		add_child(collider)
 	func _physics_process(delta: float) -> void:
 		if not RewindManager.is_rewinding:

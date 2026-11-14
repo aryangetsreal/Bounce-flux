@@ -24,7 +24,7 @@ speed = 85.0
 is_boss = true
 
 [node name="BossCrateTrap" parent="." instance=ExtResource("6")]
-position = Vector2(520, 160)
+position = Vector2(650, 160)
 trap_type = 0
 
 [node name="VaultElectricTrap" parent="." instance=ExtResource("6")]
