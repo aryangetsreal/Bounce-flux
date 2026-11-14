@@ -6,7 +6,7 @@ extends Node2D
 @export var evidence_id: String = "evidence_1"
 @export var background_texture: Texture2D
 
-var hud: Control
+var hud: CanvasLayer
 var exit_door: Node2D
 var evidence_node: Node2D
 var player: CharacterBody2D
@@ -41,10 +41,8 @@ func _ready() -> void:
 func _setup_hud() -> void:
 	var hud_scene = load("res://scenes/ui/hud.tscn")
 	if hud_scene:
-		var canvas = CanvasLayer.new()
-		add_child(canvas)
 		hud = hud_scene.instantiate()
-		canvas.add_child(hud)
+		add_child(hud)
 		hud.set_stage_name(stage_title)
 		hud.set_hint(level_hint)
 		hud.set_evidence(GameManager.evidence_count, 5)
