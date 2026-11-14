@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/warehouse.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2"]
@@ -6,6 +6,42 @@
 [ext_resource type="PackedScene" path="res://scenes/exit_door.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/guard.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://scenes/trap.tscn" id="6"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/platform.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/world/trap_release.tscn" id="13"]
+
+[sub_resource type="RectangleShape2D" id="Shape_Ground"]
+resource_local_to_scene = true
+size = Vector2(1280, 80)
+
+[sub_resource type="RectangleShape2D" id="Shape_LeftWall"]
+resource_local_to_scene = true
+size = Vector2(20, 720)
+
+[sub_resource type="RectangleShape2D" id="Shape_RightWall"]
+resource_local_to_scene = true
+size = Vector2(20, 720)
+
+[sub_resource type="RectangleShape2D" id="Shape_Shelf1"]
+resource_local_to_scene = true
+size = Vector2(180, 24)
+
+[sub_resource type="RectangleShape2D" id="Shape_Shelf2"]
+resource_local_to_scene = true
+size = Vector2(220, 24)
+
+[sub_resource type="RectangleShape2D" id="Shape_ReleaseCatwalk"]
+resource_local_to_scene = true
+size = Vector2(200, 24)
+
+[sub_resource type="RectangleShape2D" id="Shape_EvidenceShelf"]
+resource_local_to_scene = true
+size = Vector2(220, 24)
+
+[sub_resource type="RectangleShape2D" id="Shape_Release"]
+resource_local_to_scene = true
+size = Vector2(100, 60)
 
 [node name="Warehouse" type="Node2D"]
 script = ExtResource("1")
@@ -32,3 +68,82 @@ evidence_id = "evidence_2"
 
 [node name="ExitDoor" parent="." instance=ExtResource("4")]
 position = Vector2(1200, 620)
+
+[node name="Background" parent="." instance=ExtResource("11")]
+
+[node name="World" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="Ground" parent="World" instance=ExtResource("10")]
+position = Vector2(640, 660)
+
+[node name="Collider" parent="World/Ground" index="0"]
+shape = SubResource("Shape_Ground")
+one_way_collision = false
+
+[node name="LeftWall" parent="World" instance=ExtResource("10")]
+position = Vector2(10, 360)
+
+[node name="Collider" parent="World/LeftWall" index="0"]
+shape = SubResource("Shape_LeftWall")
+one_way_collision = false
+
+[node name="RightWall" parent="World" instance=ExtResource("10")]
+position = Vector2(1270, 360)
+
+[node name="Collider" parent="World/RightWall" index="0"]
+shape = SubResource("Shape_RightWall")
+one_way_collision = false
+
+[node name="Shelf1" parent="World" instance=ExtResource("10")]
+position = Vector2(200, 520)
+
+[node name="Collider" parent="World/Shelf1" index="0"]
+shape = SubResource("Shape_Shelf1")
+one_way_collision = true
+
+[node name="Shelf2" parent="World" instance=ExtResource("10")]
+position = Vector2(450, 400)
+
+[node name="Collider" parent="World/Shelf2" index="0"]
+shape = SubResource("Shape_Shelf2")
+one_way_collision = true
+
+[node name="ReleaseCatwalk" parent="World" instance=ExtResource("10")]
+position = Vector2(750, 320)
+
+[node name="Collider" parent="World/ReleaseCatwalk" index="0"]
+shape = SubResource("Shape_ReleaseCatwalk")
+one_way_collision = true
+
+[node name="EvidenceShelf" parent="World" instance=ExtResource("10")]
+position = Vector2(1080, 460)
+
+[node name="Collider" parent="World/EvidenceShelf" index="0"]
+shape = SubResource("Shape_EvidenceShelf")
+one_way_collision = true
+
+[node name="TrapRelease" parent="World" instance=ExtResource("13")]
+position = Vector2(750, 280)
+trap_path = NodePath("../../CrateTrap")
+
+[node name="Collider" parent="World/TrapRelease" index="0"]
+shape = SubResource("Shape_Release")
+
+[connection signal="activated" from="World/TrapRelease" to="." method="_on_trap_released"]
+
+[editable path="World/Ground"]
+
+[editable path="World/LeftWall"]
+
+[editable path="World/RightWall"]
+
+[editable path="World/Shelf1"]
+
+[editable path="World/Shelf2"]
+
+[editable path="World/ReleaseCatwalk"]
+
+[editable path="World/EvidenceShelf"]
+
+[editable path="World/TrapRelease"]

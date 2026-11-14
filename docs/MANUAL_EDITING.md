@@ -1,91 +1,39 @@
-# BounceFlux — Manual Editing Guide (Godot Editor)
+# Editing BounceFlux in Godot
 
-This guide documents how to manually adjust, edit, and theme BounceFlux levels and mechanics inside the Godot 4.x 2D editor.
+Open `project.godot` with Godot 4.7.2 (the version used for validation). Open a scene in `scenes/levels/` and select the **2D** workspace. All five layouts are stored in their scene files; no level geometry is generated at runtime.
 
----
+## Move, resize and recolor platforms
 
-## 1. Scene Structure & Reusable Templates
-All levels reside in `res://scenes/levels/`:
-- `apartment.tscn` (Stage 1)
-- `warehouse.tscn` (Stage 2)
-- `power_station.tscn` (Stage 3)
-- `rooftops.tscn` (Stage 4)
-- `headquarters.tscn` (Stage 5)
+Expand **World** in the Scene tree. Select a named floor, ledge, roof or crane and drag it, or change **Transform > Position**. The level uses reusable scenes from `scenes/world/`.
 
-Each level scene is composed of independent, reusable nodes:
-- `Player`: `res://scenes/player.tscn`
-- `Evidence`: `res://scenes/evidence.tscn`
-- `ExitDoor`: `res://scenes/exit_door.tscn`
-- `Guard` / `BossGuard`: `res://scenes/guard.tscn`
-- `Trap` (Crate, Electric, Crush Block): `res://scenes/trap.tscn`
-- Static platforms and interactive moving platforms.
+Expand that instance and select **Collider**. Edit **Shape > Size** or use the rectangle handles. Each platform has its own shape. If a child is hidden, right-click the instance and enable **Editable Children**. Use **Make Unique** before sharing/duplicating a shape you plan to resize independently. Keep collider and Visual centered together; resize the shape rather than scaling the whole physics body. The visual follows the rectangle size automatically.
 
----
+Select **Visual** to change **Base Color**, **Edge Color**, or optional **Texture**. A texture replaces the placeholder and fits the collider's rectangle; adjusting colors never changes collisions. Thin ledges have **One Way Collision** enabled; floors and walls are solid.
 
-## 2. Moving Platforms & Geometry
+Crane instances expose **Amplitude** (horizontal/vertical travel) and **Angular Speed**. Their scene position is the motion center. Vertical motion starts at center + vertical amplitude when played; the editor shows the center. Rewind restores their phase and position.
 
-### In the 2D Viewport:
-- **Move platforms / floors**: Select any `StaticBody2D` or `AnimatableBody2D` node in the Scene tree and drag or use the Inspector's `Transform > Position`.
-- **Resize collision & visuals**:
-  1. Expand the platform node and click `CollisionShape2D`.
-  2. In the Inspector under `Shape > Size`, set `(x, y)` to your desired dimensions.
-  3. Update the matching `Polygon2D` visual polygon points or drag the handles directly in the 2D viewport.
+## Player movement and sprites
 
----
+Select **Player** in a level, or open `scenes/player.tscn` to change defaults for all levels. Under **Movement**, edit **Move Speed**, **Acceleration**, **Gravity** and **Jump Speed**. Defaults are 330, 1800, 1500 and -720. More negative jump speed means a higher jump. Jump forgiveness/buffering remain 0.10 seconds in `scripts/player.gd`.
 
-## 3. Adjusting Player Jump & Movement Parameters
-Open `res://scenes/player.tscn` or `res://scripts/player.gd`:
-- **Speed**: In `scripts/player.gd`, change `const SPEED: float = 330.0`
-- **Jump Height / Speed**: Change `const JUMP_SPEED: float = -720.0` (more negative = higher jump)
-- **Gravity**: Change `const GRAVITY: float = 1500.0`
-- **Acceleration**: Change `const ACCELERATION: float = 1800.0`
-- **Forgiveness**: Coyote time and jump buffer are configured at `0.10s` (adjust in `_physics_process`).
+Assign the optional **Texture** to replace the drawn ball. Its collider remains separate. Evidence, guards and traps also expose optional Texture properties; no image is required. Store replacement PNGs under `assets/characters/`, `assets/props/` or `assets/backgrounds/` as appropriate.
 
----
+## Enemies, hazards and evidence
 
-## 4. Repositioning Enemies & Setting Patrol Bounds
-Select any `Guard` instance in a level:
-- **Position**: Drag the guard node to the initial placement.
-- **Inspector Properties**:
-  - `Patrol Distance`: Radius in pixels from the start point (e.g. `180.0` for 360px total patrol span).
-  - `Speed`: Horizontal patrol speed (default `110.0`).
-  - `Is Boss`: Set to `true` to switch to Crime Boss silhouette and wider collision profile.
+Select **Guard** or **BossGuard**, change **Position**, then adjust **Patrol Distance**, **Speed**, and **Is Boss**. Patrol distance is measured on either side of the starting x position.
 
----
+Select a trap to move it or change **Trap Type**, **Fall Speed** or **Cycle Time**. Keep falling crates in an unobstructed shaft above the patrol area. The current exported Trigger Delay is under specialist review and is not yet implemented by the existing trap script.
 
-## 5. Editing Evidence Placement & IDs
-Select the `Evidence` node in any level:
-- **Position**: Drag to wherever the evidence should appear.
-- **Inspector Property**:
-  - `Evidence Id`: Set to `"evidence_1"`, `"evidence_2"`, etc.
-  - Matches the level's progression milestone.
+Select **World > TrapRelease** to move the visible amber RELEASE marker/area. Its **Trap Path** must point to the intended crate (currently `../../CrateTrap` or `../../BossCrateTrap`). Its Collider sets the touch region. No new controller code is needed to reconnect it.
 
----
+Select **Evidence** and move it. Keep **Evidence Id** consistent with the level root's **Evidence Id** (`evidence_1` through `evidence_5`). Keep it above a reachable platform. Select **ExitDoor** to move the exit. Leave the root child names Player, Evidence and ExitDoor unchanged because the controller looks them up.
 
-## 6. Changing Traps & Hazards
-Select any `Trap` node in a level:
-- **`Trap Type` dropdown**:
-  - `0`: `CRATE` (Falls when triggered, knocks out guards on impact or crushes player)
-  - `1`: `ELECTRICAL` (Pulses hazard arcs periodically)
-  - `2`: `CRUSH_BLOCK` (Vertical piston hazard)
-- **`Cycle Time`**: Pulse cycle interval in seconds (e.g. `2.0`s or `2.4`s).
-- **`Trigger Delay`**: Pause before drop upon activation.
+## Background layers
 
----
+Select the separate **Background** node. Change **Background Color**, **Near Color**, **Far Color**, or its optional **Texture**. Its drawing is behind gameplay at z-index -10 and has no collision. Additional Sprite2D or Polygon2D children can be placed under Background for independent decorative layers. Set decorative z-indices below gameplay and keep all platform/interactive nodes outside Background.
 
-## 7. Replacing Sprites with Hand-Crafted Pixel Art
-Every gameplay object has visual decoupling with a dedicated export property:
-1. Save your `.png` file into `res://assets/characters/`, `res://assets/props/`, or `res://assets/backgrounds/`.
-2. Select the node in the scene tree (`Player`, `Guard`, `Evidence`, `Trap`, `Apartment`).
-3. In the Inspector, drag your `.png` into the `Texture` (or `Background Texture`) slot.
-4. If left blank, the built-in procedural neo-noir minimalist pixel graphics render automatically. No gameplay code needs to be modified.
+## After an edit
 
----
+Save the scene, press **F6** to test that level, or **F5** for the full game. Controls: A/D or arrows, Space jump, R rewind, Escape pause. Check jumps, evidence pickup, exit and rewind after moving any gameplay object. Keep both Macs on the same Godot version and avoid simultaneous edits to the same `.tscn`.
 
-## 8. Palette Quick Reference
-- Background: `#101827`
-- Secondary Background / Buildings: `#1D2940`
-- Time / Rewind glow: `#48D9E8`
-- Evidence Dossiers: `#F0C674`
-- Hazards / Danger: `#E66B55`
-- Text / Off-white typography: `#E9EDF2`
+Automated route tests encode the current layout, so intentional layout changes may require updating `tests/level_routes.gd`. See `docs/INTEGRATION_STATUS.md` for commands and actual validation results.

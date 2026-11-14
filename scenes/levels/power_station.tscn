@@ -1,10 +1,45 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/power_station.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/evidence.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/exit_door.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/trap.tscn" id="5"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/platform.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="11"]
+
+[sub_resource type="RectangleShape2D" id="Shape_StartFloor"]
+resource_local_to_scene = true
+size = Vector2(280, 80)
+
+[sub_resource type="RectangleShape2D" id="Shape_Generator1"]
+resource_local_to_scene = true
+size = Vector2(160, 30)
+
+[sub_resource type="RectangleShape2D" id="Shape_Generator2"]
+resource_local_to_scene = true
+size = Vector2(160, 30)
+
+[sub_resource type="RectangleShape2D" id="Shape_Generator3"]
+resource_local_to_scene = true
+size = Vector2(160, 30)
+
+[sub_resource type="RectangleShape2D" id="Shape_ExitFloor"]
+resource_local_to_scene = true
+size = Vector2(240, 80)
+
+[sub_resource type="RectangleShape2D" id="Shape_EvidenceGantry"]
+resource_local_to_scene = true
+size = Vector2(220, 24)
+
+[sub_resource type="RectangleShape2D" id="Shape_LeftWall"]
+resource_local_to_scene = true
+size = Vector2(20, 720)
+
+[sub_resource type="RectangleShape2D" id="Shape_RightWall"]
+resource_local_to_scene = true
+size = Vector2(20, 720)
 
 [node name="PowerStation" type="Node2D"]
 script = ExtResource("1")
@@ -42,3 +77,80 @@ evidence_id = "evidence_3"
 
 [node name="ExitDoor" parent="." instance=ExtResource("4")]
 position = Vector2(1200, 600)
+
+[node name="Background" parent="." instance=ExtResource("11")]
+
+[node name="World" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="StartFloor" parent="World" instance=ExtResource("10")]
+position = Vector2(140, 640)
+
+[node name="Collider" parent="World/StartFloor" index="0"]
+shape = SubResource("Shape_StartFloor")
+one_way_collision = false
+
+[node name="Generator1" parent="World" instance=ExtResource("10")]
+position = Vector2(440, 580)
+
+[node name="Collider" parent="World/Generator1" index="0"]
+shape = SubResource("Shape_Generator1")
+one_way_collision = true
+
+[node name="Generator2" parent="World" instance=ExtResource("10")]
+position = Vector2(680, 520)
+
+[node name="Collider" parent="World/Generator2" index="0"]
+shape = SubResource("Shape_Generator2")
+one_way_collision = true
+
+[node name="Generator3" parent="World" instance=ExtResource("10")]
+position = Vector2(920, 580)
+
+[node name="Collider" parent="World/Generator3" index="0"]
+shape = SubResource("Shape_Generator3")
+one_way_collision = true
+
+[node name="ExitFloor" parent="World" instance=ExtResource("10")]
+position = Vector2(1160, 640)
+
+[node name="Collider" parent="World/ExitFloor" index="0"]
+shape = SubResource("Shape_ExitFloor")
+one_way_collision = false
+
+[node name="EvidenceGantry" parent="World" instance=ExtResource("10")]
+position = Vector2(680, 360)
+
+[node name="Collider" parent="World/EvidenceGantry" index="0"]
+shape = SubResource("Shape_EvidenceGantry")
+one_way_collision = true
+
+[node name="LeftWall" parent="World" instance=ExtResource("10")]
+position = Vector2(10, 360)
+
+[node name="Collider" parent="World/LeftWall" index="0"]
+shape = SubResource("Shape_LeftWall")
+one_way_collision = false
+
+[node name="RightWall" parent="World" instance=ExtResource("10")]
+position = Vector2(1270, 360)
+
+[node name="Collider" parent="World/RightWall" index="0"]
+shape = SubResource("Shape_RightWall")
+one_way_collision = false
+
+[editable path="World/StartFloor"]
+
+[editable path="World/Generator1"]
+
+[editable path="World/Generator2"]
+
+[editable path="World/Generator3"]
+
+[editable path="World/ExitFloor"]
+
+[editable path="World/EvidenceGantry"]
+
+[editable path="World/LeftWall"]
+
+[editable path="World/RightWall"]

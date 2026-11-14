@@ -1,9 +1,37 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/apartment.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/evidence.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/exit_door.tscn" id="4"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/platform.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/world/moving_platform.tscn" id="12"]
+
+[sub_resource type="RectangleShape2D" id="Shape_StartFloor"]
+resource_local_to_scene = true
+size = Vector2(400, 80)
+
+[sub_resource type="RectangleShape2D" id="Shape_MidLedge"]
+resource_local_to_scene = true
+size = Vector2(160, 24)
+
+[sub_resource type="RectangleShape2D" id="Shape_ExitFloor"]
+resource_local_to_scene = true
+size = Vector2(480, 80)
+
+[sub_resource type="RectangleShape2D" id="Shape_EvidenceLedge"]
+resource_local_to_scene = true
+size = Vector2(220, 24)
+
+[sub_resource type="RectangleShape2D" id="Shape_LeftWall"]
+resource_local_to_scene = true
+size = Vector2(30, 720)
+
+[sub_resource type="RectangleShape2D" id="Shape_RightWall"]
+resource_local_to_scene = true
+size = Vector2(30, 720)
 
 [node name="Apartment" type="Node2D"]
 script = ExtResource("1")
@@ -21,3 +49,67 @@ evidence_id = "evidence_1"
 
 [node name="ExitDoor" parent="." instance=ExtResource("4")]
 position = Vector2(1180, 580)
+
+[node name="Background" parent="." instance=ExtResource("11")]
+
+[node name="World" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="StartFloor" parent="World" instance=ExtResource("10")]
+position = Vector2(200, 620)
+
+[node name="Collider" parent="World/StartFloor" index="0"]
+shape = SubResource("Shape_StartFloor")
+one_way_collision = false
+
+[node name="MidLedge" parent="World" instance=ExtResource("10")]
+position = Vector2(350, 500)
+
+[node name="Collider" parent="World/MidLedge" index="0"]
+shape = SubResource("Shape_MidLedge")
+one_way_collision = true
+
+[node name="ExitFloor" parent="World" instance=ExtResource("10")]
+position = Vector2(1040, 620)
+
+[node name="Collider" parent="World/ExitFloor" index="0"]
+shape = SubResource("Shape_ExitFloor")
+one_way_collision = false
+
+[node name="EvidenceLedge" parent="World" instance=ExtResource("10")]
+position = Vector2(950, 480)
+
+[node name="Collider" parent="World/EvidenceLedge" index="0"]
+shape = SubResource("Shape_EvidenceLedge")
+one_way_collision = true
+
+[node name="LeftWall" parent="World" instance=ExtResource("10")]
+position = Vector2(0, 360)
+
+[node name="Collider" parent="World/LeftWall" index="0"]
+shape = SubResource("Shape_LeftWall")
+one_way_collision = false
+
+[node name="RightWall" parent="World" instance=ExtResource("10")]
+position = Vector2(1280, 360)
+
+[node name="Collider" parent="World/RightWall" index="0"]
+shape = SubResource("Shape_RightWall")
+one_way_collision = false
+
+[node name="MovingPlatform" parent="World" instance=ExtResource("12")]
+position = Vector2(620, 480)
+
+[editable path="World/StartFloor"]
+
+[editable path="World/MidLedge"]
+
+[editable path="World/ExitFloor"]
+
+[editable path="World/EvidenceLedge"]
+
+[editable path="World/LeftWall"]
+
+[editable path="World/RightWall"]
+
+[editable path="World/MovingPlatform"]
