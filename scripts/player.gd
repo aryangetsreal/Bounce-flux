@@ -5,6 +5,7 @@ const SPEED: float = 330.0
 const ACCELERATION: float = 1800.0
 const GRAVITY: float = 1500.0
 const JUMP_SPEED: float = -570.0
+
 var coyote: float = 0.0
 var jump_buffer: float = 0.0
 var dead: bool = false
@@ -14,6 +15,7 @@ var checkpoint := Vector2(100, 560)
 
 func _ready() -> void:
 	add_to_group("rewindable")
+	add_to_group("player")
 	checkpoint = position
 
 func _physics_process(delta: float) -> void:
@@ -24,6 +26,7 @@ func _physics_process(delta: float) -> void:
 		if RewindManager.history.is_empty() or Input.is_action_just_pressed("jump"):
 			reset_checkpoint()
 		return
+
 	coyote = 0.10 if is_on_floor() else maxf(0.0, coyote - delta)
 	jump_buffer = 0.10 if Input.is_action_just_pressed("jump") else maxf(0.0, jump_buffer - delta)
 	var axis := Input.get_axis("move_left", "move_right")
@@ -34,15 +37,24 @@ func _physics_process(delta: float) -> void:
 		coyote = 0.0
 		jump_buffer = 0.0
 		stretch = Vector2(0.78, 1.22)
+
 	var was_grounded := is_on_floor()
 	move_and_slide()
 	if not was_grounded and is_on_floor():
 		stretch = Vector2(1.25, 0.75)
 	stretch = stretch.lerp(Vector2.ONE, minf(delta * 12.0, 1.0))
 	visual_angle += velocity.x * delta / 22.0
+
 	if position.y > 850:
-		dead = true
+		die()
+
 	queue_redraw()
+
+func die() -> void:
+	if not dead:
+		dead = true
+		velocity = Vector2.ZERO
+		queue_redraw()
 
 func reset_checkpoint() -> void:
 	position = checkpoint
@@ -53,7 +65,15 @@ func reset_checkpoint() -> void:
 	RewindManager.clear_history()
 
 func capture_rewind_state() -> Dictionary:
-	return {"position": position, "velocity": velocity, "dead": dead, "angle": visual_angle, "stretch": stretch, "coyote": coyote, "buffer": jump_buffer}
+	return {
+		"position": position,
+		"velocity": velocity,
+		"dead": dead,
+		"angle": visual_angle,
+		"stretch": stretch,
+		"coyote": coyote,
+		"buffer": jump_buffer
+	}
 
 func restore_rewind_state(state: Dictionary) -> void:
 	position = state.position
