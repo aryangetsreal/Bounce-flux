@@ -48,6 +48,15 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		get_tree().paused = not get_tree().paused
 
+	# If rewind restored evidence to uncollected state, re-sync local level state
+	if evidence_node and "collected" in evidence_node:
+		if level_evidence_collected and not evidence_node.collected:
+			level_evidence_collected = false
+			if exit_door:
+				exit_door.set_unlocked(false)
+			if hud:
+				hud.set_hint(level_hint)
+
 	if hud:
 		hud.set_paused(get_tree().paused)
 		var rewind_frac := RewindManager.available_seconds() / 3.0
@@ -58,6 +67,8 @@ func _process(_delta: float) -> void:
 
 func _on_evidence_collected(id: String) -> void:
 	level_evidence_collected = true
+	if evidence_node and "collected" in evidence_node:
+		evidence_node.collected = true
 	if exit_door:
 		exit_door.set_unlocked(true)
 	if hud:
@@ -68,9 +79,9 @@ func _on_exit_reached() -> void:
 		if hud:
 			hud.set_hint("DOOR LOCKED: YOU MUST COLLECT THE EVIDENCE FIRST!")
 		return
-	# Commit evidence permanently to global game manager
+	# Commit evidence permanently to global game manager and complete level deferred
 	GameManager.register_evidence(evidence_id)
-	GameManager.complete_level()
+	GameManager.call_deferred("complete_level")
 
 func add_floor(center: Vector2, size: Vector2, col: Color = Color("1a2436")) -> StaticBody2D:
 	var body := StaticBody2D.new()
