@@ -4,7 +4,8 @@ extends CharacterBody2D
 const SPEED: float = 330.0
 const ACCELERATION: float = 1800.0
 const GRAVITY: float = 1500.0
-const JUMP_SPEED: float = -570.0
+# The tallest required step is the power-station gantry (157 px).
+const JUMP_SPEED: float = -720.0
 
 var coyote: float = 0.0
 var jump_buffer: float = 0.0

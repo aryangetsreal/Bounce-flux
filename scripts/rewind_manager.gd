@@ -25,6 +25,10 @@ func _physics_process(_delta: float) -> void:
 func capture_after_tick() -> void:
 	if is_rewinding or get_tree().paused:
 		return
+	# Preserve the last living moments while the death prompt is displayed.
+	for player in get_tree().get_nodes_in_group("player"):
+		if player.dead:
+			return
 	var actors := get_tree().get_nodes_in_group("rewindable")
 	actors.sort_custom(func(a: Node, b: Node) -> bool: return a.get_instance_id() < b.get_instance_id())
 	var snapshot: Array = []

@@ -11,6 +11,7 @@ var exit_door: Node2D
 var evidence_node: Node2D
 var player: CharacterBody2D
 var level_evidence_collected: bool = false
+var completing: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -31,6 +32,10 @@ func _ready() -> void:
 
 	_setup_hud()
 	build_level_geometry()
+	# This controller stays active to handle Escape; world actors must pause.
+	for child in get_children():
+		if child is Node2D:
+			child.process_mode = Node.PROCESS_MODE_PAUSABLE
 	queue_redraw()
 
 func _setup_hud() -> void:
@@ -66,6 +71,8 @@ func _process(_delta: float) -> void:
 			hud.set_death_visible(player.dead)
 
 func _on_evidence_collected(id: String) -> void:
+	if RewindManager.is_rewinding or (player and player.dead):
+		return
 	level_evidence_collected = true
 	if evidence_node and "collected" in evidence_node:
 		evidence_node.collected = true
@@ -75,11 +82,14 @@ func _on_evidence_collected(id: String) -> void:
 		hud.set_hint("EVIDENCE RETRIEVED! HEAD TO THE EXIT DOOR.")
 
 func _on_exit_reached() -> void:
-	if not level_evidence_collected:
+	if completing or RewindManager.is_rewinding or (player and player.dead):
+		return
+	if not level_evidence_collected or not evidence_node.collected:
 		if hud:
 			hud.set_hint("DOOR LOCKED: YOU MUST COLLECT THE EVIDENCE FIRST!")
 		return
 	# Commit evidence permanently to global game manager and complete level deferred
+	completing = true
 	GameManager.register_evidence(evidence_id)
 	GameManager.call_deferred("complete_level")
 
@@ -92,6 +102,8 @@ func add_floor(center: Vector2, size: Vector2, col: Color = Color("1a2436")) -> 
 	var shape := RectangleShape2D.new()
 	shape.size = size
 	collider.shape = shape
+	# Thin ledges can be jumped through from below; floors and walls stay solid.
+	collider.one_way_collision = size.y <= 30.0 and size.x > size.y
 	body.add_child(collider)
 	
 	# Pixelated platform styling with top edge highlight and underside shadow

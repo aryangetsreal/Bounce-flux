@@ -36,7 +36,7 @@ Each level scene is composed of independent, reusable nodes:
 ## 3. Adjusting Player Jump & Movement Parameters
 Open `res://scenes/player.tscn` or `res://scripts/player.gd`:
 - **Speed**: In `scripts/player.gd`, change `const SPEED: float = 330.0`
-- **Jump Height / Speed**: Change `const JUMP_SPEED: float = -570.0` (more negative = higher jump)
+- **Jump Height / Speed**: Change `const JUMP_SPEED: float = -720.0` (more negative = higher jump)
 - **Gravity**: Change `const GRAVITY: float = 1500.0`
 - **Acceleration**: Change `const ACCELERATION: float = 1800.0`
 - **Forgiveness**: Coyote time and jump buffer are configured at `0.10s` (adjust in `_physics_process`).

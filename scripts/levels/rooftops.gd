@@ -17,6 +17,7 @@ class MovingPlatform extends AnimatableBody2D:
 		base_pos = base
 		amplitude = amp
 		speed_mult = spd
+		position = base_pos + Vector2(0, amplitude.y)
 
 	func _ready() -> void:
 		add_to_group("rewindable")
@@ -26,6 +27,7 @@ class MovingPlatform extends AnimatableBody2D:
 		var shape := RectangleShape2D.new()
 		shape.size = Vector2(130, 22)
 		collider.shape = shape
+		collider.one_way_collision = true
 		add_child(collider)
 
 	func _physics_process(delta: float) -> void:
