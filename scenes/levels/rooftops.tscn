@@ -1,9 +1,45 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/rooftops.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/evidence.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/exit_door.tscn" id="4"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/platform.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/world/background.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/world/moving_platform.tscn" id="12"]
+
+[sub_resource type="RectangleShape2D" id="Shape_StartRoof"]
+resource_local_to_scene = true
+size = Vector2(240, 60)
+
+[sub_resource type="RectangleShape2D" id="Shape_MiddleRoof"]
+resource_local_to_scene = true
+size = Vector2(150, 30)
+
+[sub_resource type="RectangleShape2D" id="Shape_EvidenceRoof"]
+resource_local_to_scene = true
+size = Vector2(160, 30)
+
+[sub_resource type="RectangleShape2D" id="Shape_ExitRoof"]
+resource_local_to_scene = true
+size = Vector2(200, 60)
+
+[sub_resource type="RectangleShape2D" id="Shape_LeftWall"]
+resource_local_to_scene = true
+size = Vector2(20, 720)
+
+[sub_resource type="RectangleShape2D" id="Shape_RightWall"]
+resource_local_to_scene = true
+size = Vector2(20, 720)
+
+[sub_resource type="RectangleShape2D" id="Shape_Crane1"]
+resource_local_to_scene = true
+size = Vector2(130, 22)
+
+[sub_resource type="RectangleShape2D" id="Shape_Crane2"]
+resource_local_to_scene = true
+size = Vector2(130, 22)
 
 [node name="Rooftops" type="Node2D"]
 script = ExtResource("1")
@@ -21,3 +57,82 @@ evidence_id = "evidence_4"
 
 [node name="ExitDoor" parent="." instance=ExtResource("4")]
 position = Vector2(1190, 520)
+
+[node name="Background" parent="." instance=ExtResource("11")]
+
+[node name="World" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="StartRoof" parent="World" instance=ExtResource("10")]
+position = Vector2(120, 600)
+
+[node name="Collider" parent="World/StartRoof" index="0"]
+shape = SubResource("Shape_StartRoof")
+one_way_collision = false
+
+[node name="MiddleRoof" parent="World" instance=ExtResource("10")]
+position = Vector2(450, 520)
+
+[node name="Collider" parent="World/MiddleRoof" index="0"]
+shape = SubResource("Shape_MiddleRoof")
+one_way_collision = true
+
+[node name="EvidenceRoof" parent="World" instance=ExtResource("10")]
+position = Vector2(850, 380)
+
+[node name="Collider" parent="World/EvidenceRoof" index="0"]
+shape = SubResource("Shape_EvidenceRoof")
+one_way_collision = true
+
+[node name="ExitRoof" parent="World" instance=ExtResource("10")]
+position = Vector2(1180, 560)
+
+[node name="Collider" parent="World/ExitRoof" index="0"]
+shape = SubResource("Shape_ExitRoof")
+one_way_collision = false
+
+[node name="LeftWall" parent="World" instance=ExtResource("10")]
+position = Vector2(0, 360)
+
+[node name="Collider" parent="World/LeftWall" index="0"]
+shape = SubResource("Shape_LeftWall")
+one_way_collision = false
+
+[node name="RightWall" parent="World" instance=ExtResource("10")]
+position = Vector2(1280, 360)
+
+[node name="Collider" parent="World/RightWall" index="0"]
+shape = SubResource("Shape_RightWall")
+one_way_collision = false
+
+[node name="Crane1" parent="World" instance=ExtResource("12")]
+position = Vector2(290, 560)
+amplitude = Vector2(60, 0)
+angular_speed = 1.8
+
+[node name="Collider" parent="World/Crane1" index="0"]
+shape = SubResource("Shape_Crane1")
+
+[node name="Crane2" parent="World" instance=ExtResource("12")]
+position = Vector2(650, 450)
+amplitude = Vector2(70, 40)
+angular_speed = 1.5
+
+[node name="Collider" parent="World/Crane2" index="0"]
+shape = SubResource("Shape_Crane2")
+
+[editable path="World/StartRoof"]
+
+[editable path="World/MiddleRoof"]
+
+[editable path="World/EvidenceRoof"]
+
+[editable path="World/ExitRoof"]
+
+[editable path="World/LeftWall"]
+
+[editable path="World/RightWall"]
+
+[editable path="World/Crane1"]
+
+[editable path="World/Crane2"]

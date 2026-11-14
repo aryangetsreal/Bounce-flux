@@ -1,8 +1,31 @@
-# Prompt 03 — Claude web or coding interface (UI-only specialist)
-You are an ISOLATED GODOT 4 UI DESIGN AND IMPLEMENTATION SPECIALIST for a four-hour game jam. Product: BounceFlux, a smooth, illustrated neo-noir 2D puzzle-platformer, 1280x720; keyboard-only; web-compatible Compatibility renderer. Do not modify the core game, player, rewind manager, scene loader, levels or project.godot. If you cannot edit the repository directly, return complete file contents in clearly labeled blocks for manual integration. Your scope is `scenes/ui/hud.tscn`, `scripts/ui/hud.gd`, `scenes/ui/menu_panel.tscn`, `scripts/ui/menu_panel.gd`, or smaller self-contained variants if necessary.
+Send to Claude with current scripts/ui/hud.gd, scenes/ui/hud.tscn and docs/INTERFACES.md. Bring back all three complete HUD files and validation report. This supersedes older HUD method names and smooth-art instructions.
 
-Create clean Control-based, resolution-aware UI using built-in Godot nodes, theme styles and simple colors, with NO images/fonts required and NO hardcoded Texture2D resource paths. Design: dark ink/blue, cyan time accents, gold evidence accents, off-white typography, minimal clutter. HUD shows evidence progress (0/5 to 5/5), a three-second rewind bar/indicator, short unobtrusive key legend. Menu displays title, tagline, Play and Quit, navigable by keyboard; final success overlay says CASE CLOSED and provides Restart. Avoid resource-heavy effects.
+```text
+1. Objective
+Return the existing pixel HUD you previously produced if available. Otherwise adapt the supplied working HUD to a CanvasLayer root and minimalist neo-noir pixel styling. Preserve functionality; fix real errors only.
 
-Integration contract: HUD exposes `func set_evidence_count(count: int, total: int = 5)`, `func set_rewind_fraction(value: float)`, `func show_hint(text: String)`; UI script must not call undefined globals or assume GameManager internal variables. Menu emits `start_requested` and `quit_requested`; end overlay emits `restart_requested`. Tell Codex which exact signals to connect. UI should work even if never receives updates.
+2. Existing interfaces
+Exactly these public update methods:
+set_stage_name(title: String)
+set_evidence(count: int, total: int = 5)
+set_rewind_fraction(val: float)
+set_hint(text: String)
+set_death_visible(is_dead: bool)
+set_paused(is_paused: bool)
+No gameplay singleton dependencies. Clamp rewind to 0..1. HUD updates while paused. Every Control descendant uses MOUSE_FILTER_IGNORE; CanvasLayer has no mouse_filter property. The level controller accepts CanvasLayer directly and temporarily supports the existing Control HUD.
 
-Return: precise file tree, complete scripts/scene resources where practical, scene instantiation instructions, any keyboard focus considerations, and a short smoke-test checklist. If you cannot author valid .tscn confidently, supply a single builder GDScript attached to a Control that instantiates its children in `_ready()`, minimizing integration risk. Do not embellish with additional systems. Aim to hand off usable code in <20 minutes.
+3. Allowed files
+scripts/ui/hud.gd, scripts/ui/pixel_theme.gd, scenes/ui/hud.tscn only.
+
+4. Forbidden files/actions
+All other files, including menus, levels, managers, player, components, tests and project.godot. No shared-directory edits, push, publication or main merge.
+
+5. Output
+Complete files with full repository paths, each in its own code block; no partial snippets. Built-in Godot nodes/fonts/styles only, no required assets. Include root/child structure, exact tested commands and real output if Godot is available; label untested work.
+
+6. Acceptance
+CanvasLayer root, all six methods callable, evidence and long stage names fit at 1280x720, readable hint/death/pause states, every Control ignores mouse, no missing resources or parser errors. Palette: #101827 background, #1D2940 secondary, #48D9E8 rewind, #F0C674 evidence, #E66B55 hazards, #E9EDF2 text. Keyboard-only game.
+
+7. Integration
+Human returns all three files to Codex. Codex reviews ownership, resources and interfaces, runs headless import and HUD/gameplay checks, then commits compatible work. Do not replace other functioning systems.
+```

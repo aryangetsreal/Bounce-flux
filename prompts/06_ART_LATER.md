@@ -1,9 +1,9 @@
 # Prompt 06 — Art direction for later ChatGPT image-generation session
-Generate assets only when explicitly requested. Overall visual bible: polished, smooth non-pixelated 2D game art for a side-scrolling platformer, crisp silhouette, medium-detail illustrated/vector-inspired shapes, cinematic neo-noir lighting, navy-charcoal shadows, cyan time power, warm amber practical lights, pale gold evidence, consistent camera and perspective, no written words, no logos, no UI. Maintain coherent scale and light source across assets.
+Generate assets only when explicitly requested. Overall visual bible: minimalist neo-noir 2D pixel art for a side-scrolling platformer, crisp silhouette, simple readable stepped pixel shapes, cinematic neo-noir lighting, navy-charcoal shadows, cyan time power, warm amber practical lights, pale gold evidence, consistent camera and perspective, no written words, no logos, no UI. Maintain coherent scale and light source across assets.
 
 Ball sprite request (separate invocation): single small glowing cyan-core rubber ball, subtle clock motif, expressive but not excessively detailed, front-side gameplay sprite, centered, full ball visible, transparent background, no shadow baked in, no ground, no additional objects, high-resolution square canvas.
 
-Guard sprite request: single full-body masked goon silhouette, side-view neutral pose suitable for 2D platformer, full body inside transparent canvas, smooth shape language, strong readable silhouette, no floor, no weapons required.
+Guard sprite request: single full-body masked goon silhouette, side-view neutral pose suitable for 2D platformer, full body inside transparent canvas, stepped pixel silhouettes, strong readable silhouette, no floor, no weapons required.
 
 Background request: 16:9 wide background for [APARTMENT/WAREHOUSE/HEADQUARTERS], side-on 2D platformer environment, layered distant scenery and atmospheric lights, no gameplay platforms, no interactive crates, no guards, no text, no UI, keep ground-plane space visually open so Godot colliders and props can be overlaid independently. If foreground platforms are desired, request them as separate transparent assets.
 

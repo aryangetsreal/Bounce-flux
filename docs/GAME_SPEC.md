@@ -20,7 +20,7 @@ Murdered investigator's soul inhabits a bouncing ball after a temporal book malf
 - Art is optional and swappable at any moment; never merge gameplay collider and visuals.
 - Asset path conventions: res://assets/characters/ball.png, guard.png, boss.png; res://assets/backgrounds/apartment.png, warehouse.png, power_station.png, rooftops.png, headquarters.png; res://assets/props/crate.png, evidence.png; res://assets/ui/ (all optional).
 - Absence of asset MUST NOT prevent project import or play. Use procedural drawings/placeholders by default. Future generated images must require only replacing a texture or assigning an exported property, not reauthoring scenes.
-- Non-pixel, smooth illustrated neo-noir: navy/charcoal environments, cyan time effect, warm amber actionable props, pale gold evidence; high contrast and readable silhouettes. Parallax is optional and cosmetic.
+- Minimalist neo-noir 2D pixel art (current coordinator override): background #101827, secondary #1D2940, time/rewind #48D9E8, evidence #F0C674, hazards #E66B55, light text #E9EDF2. Use readable pixel silhouettes and replaceable placeholders; visuals never change gameplay interfaces. Parallax is optional and cosmetic.
 - Audio optional; all AudioStreamPlayer references null-safe and game runs silently without files. CC0/compatible licenses only; track provenance in docs/ASSET_CREDITS.md.
 
 ## Fixed interface contracts
