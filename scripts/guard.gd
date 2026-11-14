@@ -83,22 +83,43 @@ func _draw() -> void:
 		return
 
 	if is_boss:
-		# Crime Boss silhouette: wider, distinct coat and hat/glow
-		var body_col := Color("1e182e") if not disabled else Color("443c55")
-		var accent_col := Color("993850") if not disabled else Color("554a5a")
-		draw_rect(Rect2(-24, -50, 48, 50), body_col)
-		draw_circle(Vector2(0, -56), 16, accent_col)
-		# Eyes or hat rim
-		draw_line(Vector2(-18, -50), Vector2(18, -50), Color("c49a45"), 4.0)
+		# Pixelated Crime Boss silhouette
+		var coat_col := Color("181224") if not disabled else Color("383244")
+		var lapel_col := Color("912c48") if not disabled else Color("4d313c")
+		var hat_col := Color("120d1c") if not disabled else Color("2c2635")
+		var gold_trim := Color("e8d07a")
+
+		# Trenchcoat torso
+		draw_rect(Rect2(-22, -44, 44, 44), coat_col)
+		# Red lapels
+		draw_rect(Rect2(-6, -40, 12, 34), lapel_col)
+		# Shoulders
+		draw_rect(Rect2(-26, -44, 52, 14), coat_col)
+		# Boss Fedora (stepped pixels)
+		draw_rect(Rect2(-24, -48, 48, 4), hat_col) # brim
+		draw_rect(Rect2(-16, -58, 32, 10), hat_col) # crown
+		draw_rect(Rect2(-16, -50, 32, 2), gold_trim) # hatband
+		# Eyes / shadow
+		draw_rect(Rect2(-10, -46, 20, 2), Color("000000"))
 		if disabled:
-			# Stun indicator
-			draw_arc(Vector2(0, -80), 10, 0, 6.28, 12, Color("e8d07a"), 2.0)
+			# Pixel stun stars
+			draw_rect(Rect2(-8, -66, 4, 4), gold_trim)
+			draw_rect(Rect2(4, -68, 4, 4), gold_trim)
 	else:
-		# Standard Guard: Navy/charcoal silhouette with red visor/accent
-		var body_col := Color("141c2c") if not disabled else Color("323a48")
-		var visor_col := Color("d64747") if not disabled else Color("6e5959")
-		draw_rect(Rect2(-16, -42, 32, 42), body_col)
-		draw_circle(Vector2(0, -48), 12, body_col)
-		draw_line(Vector2(-10, -48), Vector2(10, -48), visor_col, 3.0)
+		# Pixelated Standard Guard
+		var armor_col := Color("182333") if not disabled else Color("2a3442")
+		var visor_col := Color("e04545") if not disabled else Color("594040")
+		var shadow_col := Color("0d141e")
+
+		# Boots / legs
+		draw_rect(Rect2(-12, -8, 8, 8), shadow_col)
+		draw_rect(Rect2(4, -8, 8, 8), shadow_col)
+		# Torso / tactical vest
+		draw_rect(Rect2(-14, -36, 28, 28), armor_col)
+		draw_rect(Rect2(-10, -32, 20, 18), shadow_col)
+		# Helmet
+		draw_rect(Rect2(-12, -48, 24, 12), armor_col)
+		# Red visor horizontal pixel slit
+		draw_rect(Rect2(-10, -42, 20, 4), visor_col)
 		if disabled:
-			draw_arc(Vector2(0, -68), 8, 0, 6.28, 8, Color("e8d07a"), 2.0)
+			draw_rect(Rect2(-2, -56, 4, 4), Color("e8d07a"))

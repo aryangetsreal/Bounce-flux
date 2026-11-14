@@ -27,7 +27,13 @@ class MovingPlatform extends AnimatableBody2D:
 		position = state.position
 		phase = state.phase
 	func _draw() -> void:
-		draw_rect(Rect2(-70, -12, 140, 24), Color("e9ae55"))
+		# Pixelated amber moving platform
+		draw_rect(Rect2(-70, -12, 140, 24), Color("b87723"))
+		draw_rect(Rect2(-68, -10, 136, 20), Color("e9ae55"))
+		draw_rect(Rect2(-70, -12, 140, 4), Color("f5d76e")) # top rim highlight
+		# Pixel chevrons
+		for x in range(-50, 60, 24):
+			draw_rect(Rect2(x, -4, 8, 8), Color("8f5611"))
 
 func build_level_geometry() -> void:
 	# Starting floor

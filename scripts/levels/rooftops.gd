@@ -42,7 +42,13 @@ class MovingPlatform extends AnimatableBody2D:
 		phase = state.phase
 
 	func _draw() -> void:
-		draw_rect(Rect2(-65, -11, 130, 22), Color("e9ae55"))
+		# Pixelated crane suspended platform
+		draw_rect(Rect2(-65, -11, 130, 22), Color("b87723"))
+		draw_rect(Rect2(-63, -9, 126, 18), Color("e9ae55"))
+		draw_rect(Rect2(-65, -11, 130, 4), Color("f5d76e"))
+		# Industrial rivets
+		draw_rect(Rect2(-60, 0, 4, 4), Color("8f5611"))
+		draw_rect(Rect2(56, 0, 4, 4), Color("8f5611"))
 
 func build_level_geometry() -> void:
 	# Rooftop 1 (start)

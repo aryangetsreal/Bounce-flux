@@ -90,6 +90,24 @@ func _draw() -> void:
 	if texture:
 		draw_texture_rect(texture, Rect2(-22, -22, 44, 44), false)
 	else:
-		draw_circle(Vector2.ZERO, 22, Color("61e3ec") if not dead else Color("aa6478"))
-		draw_arc(Vector2.ZERO, 15, -0.8, 0.8, 16, Color("102137"), 4, true)
+		# 2D Pixelated minimalist ball
+		var body_col := Color("4deeea") if not dead else Color("e0536c")
+		var shadow_col := Color("1f5c6b") if not dead else Color("6e2433")
+		var eye_col := Color("0b1726")
+		var glint_col := Color("d8ffff")
+		
+		# Stepped pixel-circle silhouette (radius ~22)
+		draw_rect(Rect2(-14, -22, 28, 44), body_col)
+		draw_rect(Rect2(-20, -18, 40, 36), body_col)
+		draw_rect(Rect2(-22, -14, 44, 28), body_col)
+		
+		# Pixel bottom shadow / bevel
+		draw_rect(Rect2(-12, 16, 24, 4), shadow_col)
+		draw_rect(Rect2(-18, 12, 36, 4), shadow_col)
+		
+		# Detective fedora / visor glint line (pixel-aligned)
+		draw_rect(Rect2(-6, -14, 8, 4), glint_col)
+		# Slit gaze / investigator eye band
+		draw_rect(Rect2(-10, -4, 20, 6), eye_col)
+		draw_rect(Rect2(-6, -2, 6, 4), Color("e8d07a")) # amber focus glint
 	draw_set_transform(Vector2.ZERO)

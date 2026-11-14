@@ -42,14 +42,23 @@ func restore_rewind_state(state: Dictionary) -> void:
 func _draw() -> void:
 	if collected:
 		return
-	var scale_pulse: float = 1.0 + sin(pulse_time * 4.0) * 0.12
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(scale_pulse, scale_pulse))
+	var pulse_step: int = int(pulse_time * 6.0) % 2
+	var offset_y: float = -2.0 if pulse_step == 1 else 0.0
+	draw_set_transform(Vector2(0, offset_y))
 	if texture:
 		draw_texture_rect(texture, Rect2(-16, -16, 32, 32), false)
 	else:
-		# Neo-noir glowing pale gold folder/record placeholder
-		draw_rect(Rect2(-14, -18, 28, 36), Color("e8d07a"))
-		draw_rect(Rect2(-11, -15, 22, 10), Color("fff8c4"))
-		draw_line(Vector2(-10, 2), Vector2(10, 2), Color("7a6729"), 2.0)
-		draw_line(Vector2(-10, 8), Vector2(10, 8), Color("7a6729"), 2.0)
+		# Pixelated minimalist gold dossier record
+		# Outer folder
+		draw_rect(Rect2(-14, -18, 28, 36), Color("b89635"))
+		draw_rect(Rect2(-12, -16, 24, 32), Color("f5d76e"))
+		# Tab
+		draw_rect(Rect2(-14, -22, 12, 4), Color("b89635"))
+		draw_rect(Rect2(-12, -20, 8, 4), Color("f5d76e"))
+		# Internal dossier paper lines
+		draw_rect(Rect2(-8, -10, 16, 2), Color("8a6d20"))
+		draw_rect(Rect2(-8, -4, 16, 2), Color("8a6d20"))
+		draw_rect(Rect2(-8, 2, 12, 2), Color("8a6d20"))
+		# Confidential red stamp badge (pixel)
+		draw_rect(Rect2(2, 6, 6, 6), Color("d64747"))
 	draw_set_transform(Vector2.ZERO)

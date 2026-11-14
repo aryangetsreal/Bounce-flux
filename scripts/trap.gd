@@ -125,27 +125,52 @@ func _draw() -> void:
 
 	match trap_type:
 		TrapType.CRATE:
-			# Wooden warehouse cargo crate
-			draw_rect(Rect2(-24, -24, 48, 48), Color("82542a"))
-			draw_rect(Rect2(-20, -20, 40, 40), Color("a66d3b"))
-			draw_line(Vector2(-20, -20), Vector2(20, 20), Color("5c3818"), 3.0)
-			draw_line(Vector2(20, -20), Vector2(-20, 20), Color("5c3818"), 3.0)
+			# Pixelated shipping crate (48x48)
+			var wood_dark := Color("543216")
+			var wood_mid := Color("855127")
+			var wood_light := Color("a66b37")
+			# Outer rim
+			draw_rect(Rect2(-24, -24, 48, 48), wood_dark)
+			draw_rect(Rect2(-20, -20, 40, 40), wood_mid)
+			# Pixel corner reinforcements
+			draw_rect(Rect2(-24, -24, 8, 8), wood_dark)
+			draw_rect(Rect2(16, -24, 8, 8), wood_dark)
+			draw_rect(Rect2(-24, 16, 8, 8), wood_dark)
+			draw_rect(Rect2(16, 16, 8, 8), wood_dark)
+			# Stepped pixel diagonal braces
+			for i in range(-16, 16, 4):
+				draw_rect(Rect2(i, i, 4, 4), wood_dark)
+				draw_rect(Rect2(-i - 4, i, 4, 4), wood_dark)
+			# Center plank highlight
+			draw_rect(Rect2(-16, -2, 32, 4), wood_light)
+
 		TrapType.ELECTRICAL:
-			# Neon/cyan electrical arcs when active, dark metal pylons when dormant
-			draw_rect(Rect2(-20, -30, 40, 60), Color("1a2233"))
+			# Pixelated electrical emitter node
+			draw_rect(Rect2(-16, -28, 32, 56), Color("121926"))
+			draw_rect(Rect2(-12, -24, 24, 48), Color("1a2436"))
+			draw_rect(Rect2(-14, -28, 28, 6), Color("2c3b54"))
+			draw_rect(Rect2(-14, 22, 28, 6), Color("2c3b54"))
+
 			if active_hazard:
-				# Electric sparks
-				var col := Color("61e3ec")
-				draw_rect(Rect2(-16, -26, 32, 52), Color(0.2, 0.8, 1.0, 0.25))
-				draw_line(Vector2(-12, -20), Vector2(6, -6), col, 3.0)
-				draw_line(Vector2(6, -6), Vector2(-8, 8), col, 3.0)
-				draw_line(Vector2(-8, 8), Vector2(10, 22), col, 3.0)
+				# Stepped cyan pixel lightning bolt
+				var cyan_core := Color("61e3ec")
+				var cyan_glow := Color(0.2, 0.8, 0.95, 0.3)
+				draw_rect(Rect2(-10, -18, 20, 36), cyan_glow)
+				draw_rect(Rect2(-6, -18, 4, 10), cyan_core)
+				draw_rect(Rect2(-2, -10, 8, 4), cyan_core)
+				draw_rect(Rect2(2, -8, 4, 12), cyan_core)
+				draw_rect(Rect2(-4, 2, 8, 4), cyan_core)
+				draw_rect(Rect2(-4, 4, 4, 12), cyan_core)
 			else:
-				draw_line(Vector2(-12, 0), Vector2(12, 0), Color("3d4b63"), 2.0)
+				draw_rect(Rect2(-2, -2, 4, 4), Color("e04545"))
+
 		TrapType.CRUSH_BLOCK:
-			# Heavy industrial metal piston block
-			draw_rect(Rect2(-32, -32, 64, 64), Color("3a4659"))
-			draw_rect(Rect2(-28, -28, 56, 56), Color("242d3d"))
-			# Amber warning hazard stripes
-			for x in range(-24, 24, 16):
-				draw_line(Vector2(x, -20), Vector2(x + 10, 20), Color("e9ae55"), 3.0)
+			# Pixelated metal crush block
+			draw_rect(Rect2(-32, -32, 64, 64), Color("1e2633"))
+			draw_rect(Rect2(-28, -28, 56, 56), Color("2d394d"))
+			# Stepped pixel hazard stripes
+			draw_rect(Rect2(-24, 20, 12, 8), Color("e9ae55"))
+			draw_rect(Rect2(-4, 20, 12, 8), Color("e9ae55"))
+			draw_rect(Rect2(16, 20, 12, 8), Color("e9ae55"))
+			draw_rect(Rect2(-26, -26, 4, 4), Color("0f141c"))
+			draw_rect(Rect2(22, -26, 4, 4), Color("0f141c"))

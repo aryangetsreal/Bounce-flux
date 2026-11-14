@@ -72,7 +72,7 @@ func _on_exit_reached() -> void:
 	GameManager.register_evidence(evidence_id)
 	GameManager.complete_level()
 
-func add_floor(center: Vector2, size: Vector2, col: Color = Color("233145")) -> StaticBody2D:
+func add_floor(center: Vector2, size: Vector2, col: Color = Color("1a2436")) -> StaticBody2D:
 	var body := StaticBody2D.new()
 	body.position = center
 	body.collision_layer = 1
@@ -82,14 +82,34 @@ func add_floor(center: Vector2, size: Vector2, col: Color = Color("233145")) -> 
 	shape.size = size
 	collider.shape = shape
 	body.add_child(collider)
-	var visual := Polygon2D.new()
-	visual.polygon = PackedVector2Array([
+	
+	# Pixelated platform styling with top edge highlight and underside shadow
+	var visual := Node2D.new()
+	var top_highlight := Color("2c3b54")
+	var dark_shadow := Color("0d141e")
+	
+	var base_poly := Polygon2D.new()
+	base_poly.polygon = PackedVector2Array([
 		-size / 2,
 		Vector2(size.x / 2, -size.y / 2),
 		size / 2,
 		Vector2(-size.x / 2, size.y / 2)
 	])
-	visual.color = col
+	base_poly.color = col
+	visual.add_child(base_poly)
+
+	# Stepped pixel border highlight on top edge
+	if size.y >= 8:
+		var edge_poly := Polygon2D.new()
+		edge_poly.polygon = PackedVector2Array([
+			-size / 2,
+			Vector2(size.x / 2, -size.y / 2),
+			Vector2(size.x / 2, -size.y / 2 + 4),
+			Vector2(-size.x / 2, -size.y / 2 + 4)
+		])
+		edge_poly.color = top_highlight
+		visual.add_child(edge_poly)
+
 	body.add_child(visual)
 	add_child(body)
 	return body
@@ -102,6 +122,20 @@ func _draw() -> void:
 	if background_texture:
 		draw_texture_rect(background_texture, Rect2(0, 0, 1280, 720), false)
 	else:
-		# Neo-noir default atmospheric background pillars
-		for i in range(10):
-			draw_rect(Rect2(i * 140, 100, 70, 520), Color("09121f"))
+		# Pixelated minimalist skyline / silhouettes
+		var building_dark := Color("0a0f17")
+		var building_light := Color("101824")
+		var window_dim := Color("1c2b3d")
+		var window_lit := Color("2d4663")
+		
+		# Far building silhouettes
+		for b in range(12):
+			var bx: float = b * 115 - 30
+			var bw: float = 90
+			var bh: float = 320 + ((b * 37) % 220)
+			draw_rect(Rect2(bx, 720 - bh, bw, bh), building_dark)
+			# Small pixel windows (checkerboard)
+			for wy in range(int(720 - bh + 20), 680, 28):
+				for wx in range(int(bx + 12), int(bx + bw - 16), 20):
+					var lit: bool = ((wy * 7 + wx * 13) % 5) == 0
+					draw_rect(Rect2(wx, wy, 8, 12), window_lit if lit else window_dim)
