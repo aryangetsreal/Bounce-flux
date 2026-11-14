@@ -333,5 +333,5 @@ ERROR: Condition "ret != noErr" is true. Returning: ""
    at: get_system_ca_certificates (platform/macos/os_macos.mm:1035)
 ```
 
-This environment message was intermittent in sandboxed Godot invocations and did not cause the import or test assertions to fail. It remains recorded here rather than being reported as a completely clean console.
+That sandboxed repeat also reported inability to save the editor settings file outside the project. The same exact import command was rerun with filesystem approval and exited 0 with the clean import output shown earlier in this report; both the certificate and settings-save errors disappeared. Gameplay assertions were unaffected.
 
