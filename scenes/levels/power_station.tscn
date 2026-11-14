@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/power_station.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/evidence.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/exit_door.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/trap.tscn" id="5"]
+
+[node name="PowerStation" type="Node2D"]
+script = ExtResource("1")
+level_index = 3
+stage_title = "STAGE 3: POWER STATION"
+level_hint = "Electric arcs pulse on a 2-second rhythm. Time your hops; hold R to rewind if shocked!"
+evidence_id = "evidence_3"
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(100, 560)
+
+[node name="ElectricTrap1" parent="." instance=ExtResource("5")]
+position = Vector2(300, 590)
+trap_type = 1
+cycle_time = 2.0
+
+[node name="ElectricTrap2" parent="." instance=ExtResource("5")]
+position = Vector2(560, 530)
+trap_type = 1
+cycle_time = 2.0
+
+[node name="ElectricTrap3" parent="." instance=ExtResource("5")]
+position = Vector2(800, 530)
+trap_type = 1
+cycle_time = 2.0
+
+[node name="ElectricTrap4" parent="." instance=ExtResource("5")]
+position = Vector2(1040, 590)
+trap_type = 1
+cycle_time = 2.0
+
+[node name="Evidence" parent="." instance=ExtResource("3")]
+position = Vector2(680, 310)
+evidence_id = "evidence_3"
+
+[node name="ExitDoor" parent="." instance=ExtResource("4")]
+position = Vector2(1200, 600)

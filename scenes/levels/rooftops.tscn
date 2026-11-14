@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/rooftops.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/evidence.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/exit_door.tscn" id="4"]
+
+[node name="Rooftops" type="Node2D"]
+script = ExtResource("1")
+level_index = 4
+stage_title = "STAGE 4: CITY ROOFTOPS"
+level_hint = "Precision leaps across the city skyline. Rewind any miscalculated bounces!"
+evidence_id = "evidence_4"
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(90, 530)
+
+[node name="Evidence" parent="." instance=ExtResource("3")]
+position = Vector2(850, 330)
+evidence_id = "evidence_4"
+
+[node name="ExitDoor" parent="." instance=ExtResource("4")]
+position = Vector2(1190, 520)

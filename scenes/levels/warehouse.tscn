@@ -1,0 +1,34 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/warehouse.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/evidence.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/exit_door.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/guard.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/trap.tscn" id="6"]
+
+[node name="Warehouse" type="Node2D"]
+script = ExtResource("1")
+level_index = 2
+stage_title = "STAGE 2: CRIMINAL WAREHOUSE"
+level_hint = "A guard blocks the lower route. Climb the catwalks and drop the crate on him!"
+evidence_id = "evidence_2"
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(100, 580)
+
+[node name="Guard" parent="." instance=ExtResource("5")]
+position = Vector2(750, 620)
+patrol_distance = 150.0
+speed = 100.0
+
+[node name="CrateTrap" parent="." instance=ExtResource("6")]
+position = Vector2(750, 160)
+trap_type = 0
+
+[node name="Evidence" parent="." instance=ExtResource("3")]
+position = Vector2(1080, 410)
+evidence_id = "evidence_2"
+
+[node name="ExitDoor" parent="." instance=ExtResource("4")]
+position = Vector2(1200, 620)

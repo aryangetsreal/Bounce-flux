@@ -1,0 +1,23 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/apartment.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/evidence.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/exit_door.tscn" id="4"]
+
+[node name="Apartment" type="Node2D"]
+script = ExtResource("1")
+level_index = 1
+stage_title = "STAGE 1: DETECTIVE'S APARTMENT"
+level_hint = "A/D to move • Space to jump • Cross the gap on the amber platform • Hold R if you fall"
+evidence_id = "evidence_1"
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(120, 540)
+
+[node name="Evidence" parent="." instance=ExtResource("3")]
+position = Vector2(950, 430)
+evidence_id = "evidence_1"
+
+[node name="ExitDoor" parent="." instance=ExtResource("4")]
+position = Vector2(1180, 580)
